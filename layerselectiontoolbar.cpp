@@ -31,7 +31,10 @@ LayerSelectionToolbar::LayerSelectionToolbar(QWidget *parent) :
     m_actionGroup(new QActionGroup(this))
 {
     updateLayers();
-    this->actions().first()->setChecked(true);
+
+    if (actions().length() > 0) {
+        actions().first()->setChecked(true);
+    }
 
     connect(m_mapper, QOverload<const QString&>::of(&QSignalMapper::mapped), this, &LayerSelectionToolbar::layerSelected);
 }

@@ -90,11 +90,13 @@ void Layer::saveLayers(QList<Layer*> layers)
 QList<Layer*> Layer::readLayers()
 {
     QFile layersFile(settingsPath());
-    layersFile.open(QFile::ReadOnly);
+    QList<Layer*> layers;
+
+    if (!layersFile.open(QFile::ReadOnly)) {
+        return layers;
+    }
 
     QXmlStreamReader reader(&layersFile);
-
-    QList<Layer*> layers;
 
     if (reader.readNextStartElement() && reader.name() == "layers") {
         while (reader.readNextStartElement()) {
