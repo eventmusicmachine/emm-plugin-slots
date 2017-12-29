@@ -1,0 +1,15 @@
+{
+    "Name": "Slots",
+    "Version": "3.0.0",
+    "Required": false,
+    "HiddenByDefault": false,
+    "Vendor": "Event Music Machine",
+    "Category": "Central Components",
+    "Description": "Slot featture for the EMM",
+    "Dependencies": [
+        {
+            "Name": "Core",
+            "Version": "3.0.0"
+        }
+    ]
+}
