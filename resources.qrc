@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/slots">
+        <file>qss/default.qss</file>
+    </qresource>
+</RCC>

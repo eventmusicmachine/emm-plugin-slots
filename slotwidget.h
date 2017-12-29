@@ -36,11 +36,13 @@ class SlotWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit SlotWidget(QWidget *parent = 0);
+    explicit SlotWidget(int row, int column, QWidget *parent = 0);
     ~SlotWidget();
 
 private:
     Ui::SlotWidget *ui;
+    int m_row;
+    int m_column;
 };
 
 } // namespace Internal

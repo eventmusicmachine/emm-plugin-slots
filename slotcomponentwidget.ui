@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Slots</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
   <layout class="QVBoxLayout" name="slotComponentLayout">
    <property name="spacing">
     <number>0</number>
@@ -30,7 +33,11 @@
     <number>0</number>
    </property>
    <item>
-    <layout class="QGridLayout" name="slotLayout"/>
+    <layout class="QGridLayout" name="slotLayout">
+     <property name="spacing">
+      <number>1</number>
+     </property>
+    </layout>
    </item>
   </layout>
  </widget>

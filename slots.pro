@@ -44,3 +44,6 @@ DISTFILES += \
 OTHER_FILES += \
     README.md \
     LICENSE
+
+RESOURCES += \
+    resources.qrc

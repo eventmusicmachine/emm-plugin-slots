@@ -1,0 +1,8 @@
+#emptyLabel {
+    color: rgba(0, 0, 0, 0.25);
+    font-size: 12px;
+}
+
+QWidget#Slots::Internal::SlotWidget {
+    border: 1px solid black;
+}

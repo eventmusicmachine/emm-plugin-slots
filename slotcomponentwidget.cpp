@@ -32,6 +32,11 @@ SlotComponentWidget::SlotComponentWidget(QWidget *parent) :
 {
     m_ui->setupUi(this);
 
+    QFile styleFile(":/slots/qss/default.qss");
+    styleFile.open(QFile::ReadOnly);
+    this->setStyleSheet(QString(styleFile.readAll()));
+    styleFile.close();
+
     LayerSelectionToolbar *layerSelector = new LayerSelectionToolbar(this);
     m_ui->slotComponentLayout->insertWidget(0, layerSelector);
 
@@ -74,7 +79,7 @@ void SlotComponentWidget::updateWidgets()
         for (int j = 0; j < newRows; j++) {
             QLayoutItem *item = m_ui->slotLayout->itemAtPosition(j, i);
             if (item == 0) {
-                SlotWidget *widget = new SlotWidget(this);
+                SlotWidget *widget = new SlotWidget(j, i, this);
                 m_ui->slotLayout->addWidget(widget, j, i);
             }
         }

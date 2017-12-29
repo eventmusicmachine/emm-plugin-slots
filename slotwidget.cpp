@@ -21,11 +21,13 @@
 
 using namespace Slots::Internal;
 
-SlotWidget::SlotWidget(QWidget *parent) :
+SlotWidget::SlotWidget(int row, int column, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SlotWidget)
 {
     ui->setupUi(this);
+    m_row = row;
+    m_column = column;
 }
 
 SlotWidget::~SlotWidget()
