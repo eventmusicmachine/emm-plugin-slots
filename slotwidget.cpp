@@ -16,21 +16,57 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  **************************************************************************/
 
+#include <QMouseEvent>
+
 #include "slotwidget.h"
 #include "ui_slotwidget.h"
+#include "slot.h"
+#include "slotconfigurationdialog.h"
 
 using namespace Slots::Internal;
 
 SlotWidget::SlotWidget(int row, int column, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::SlotWidget)
+    m_ui(new Ui::SlotWidget)
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
     m_row = row;
     m_column = column;
 }
 
 SlotWidget::~SlotWidget()
 {
-    delete ui;
+    delete m_ui;
 }
+
+void SlotWidget::updateSlot(QUuid layerId)
+{
+    if (layerId == 0) {
+        return;
+    }
+    m_slot = Slot::create(layerId, m_row, m_column);
+    if (m_slot) {
+        QFont font = m_ui->titleLabel->font();
+        font.setPointSize(m_slot->fontSize());
+
+        m_ui->stackedWidget->setCurrentIndex(m_slot->exists() ? 1 : 0);
+        m_ui->playerPage->setStyleSheet("#playerPage { background-color: " + m_slot->backgroundColor().name() + " }");
+        m_ui->titleLabel->setText(m_slot->title());
+        m_ui->titleLabel->setStyleSheet("#titleLabel { color: " + m_slot->fontColor().name() + " }");
+        m_ui->titleLabel->setFont(font);
+    }
+}
+
+void SlotWidget::config()
+{
+    SlotConfigurationDialog dialog(m_slot, this);
+    dialog.exec();
+}
+
+void SlotWidget::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::RightButton) {
+        config();
+    }
+}
+

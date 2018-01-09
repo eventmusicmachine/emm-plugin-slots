@@ -34,7 +34,8 @@ SlotsPlugin::SlotsPlugin()
 
 SlotsPlugin::~SlotsPlugin()
 {
-
+    ExtensionSystem::PluginManager::removeObject(m_factory);
+    delete m_factory;
 }
 
 bool SlotsPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -42,7 +43,8 @@ bool SlotsPlugin::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
 
-    ExtensionSystem::PluginManager::addObject(new SlotComponentFactory);
+    m_factory = new SlotComponentFactory;
+    ExtensionSystem::PluginManager::addObject(m_factory);
     Settings::NavigationTreeItem *settingsItem = Settings::SettingsManager::createNavigationNode("SLOTS", tr("Cart Slots"));
     settingsItem->setFactory(new GeneralSettingsFactory());
     Settings::SettingsManager::navigationNode("ROOT")->addChild(settingsItem);

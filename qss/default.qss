@@ -6,3 +6,7 @@
 QWidget#Slots::Internal::SlotWidget {
     border: 1px solid black;
 }
+
+#titleLabel {
+    text-align: center;
+}

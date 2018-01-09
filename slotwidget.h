@@ -20,10 +20,14 @@
 #define SLOTWIDGET_H
 
 #include <QWidget>
+#include <QUuid>
 
 namespace Slots {
 
 namespace Internal {
+
+class Slot;
+class SlotConfigurationDialog;
 
 namespace Ui {
 
@@ -39,8 +43,17 @@ public:
     explicit SlotWidget(int row, int column, QWidget *parent = 0);
     ~SlotWidget();
 
+public slots:
+    void updateSlot(QUuid layerId);
+
+protected:
+    void mousePressEvent(QMouseEvent *);
+
 private:
-    Ui::SlotWidget *ui;
+    void config();
+
+    Ui::SlotWidget *m_ui;
+    Slot *m_slot;
     int m_row;
     int m_column;
 };

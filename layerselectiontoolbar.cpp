@@ -32,17 +32,23 @@ LayerSelectionToolbar::LayerSelectionToolbar(QWidget *parent) :
 {
     updateLayers();
 
+    connect(m_mapper, QOverload<const QString&>::of(&QSignalMapper::mapped), this, &LayerSelectionToolbar::layerSelected);
+
     if (actions().length() > 0) {
         actions().first()->setChecked(true);
+        m_mapper->map(actions().first());
     }
-
-    connect(m_mapper, QOverload<const QString&>::of(&QSignalMapper::mapped), this, &LayerSelectionToolbar::layerSelected);
 }
 
 LayerSelectionToolbar::~LayerSelectionToolbar()
 {
     delete m_mapper;
     delete m_actionGroup;
+}
+
+void LayerSelectionToolbar::map()
+{
+    m_mapper->map(m_actionGroup->checkedAction());
 }
 
 void LayerSelectionToolbar::updateLayers()
@@ -62,5 +68,6 @@ void LayerSelectionToolbar::updateLayers()
         m_actionGroup->addAction(action);
         m_mapper->setMapping(action, layer->id().toString());
         this->addAction(action);
+        connect(action, &QAction::triggered, m_mapper, QOverload<>::of(&QSignalMapper::map));
     }
 }

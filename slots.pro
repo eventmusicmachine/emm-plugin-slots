@@ -3,7 +3,7 @@ DEFINES += SLOTS_LIBRARY
 QT += widgets
 
 EMM_SOURCE_TREE = "../emm"
-EMM_BUILD_TREE = "../build-emm-Desktop_Qt_5_9_2_GCC_64bit-Debug"
+EMM_BUILD_TREE = "../build-emm-Desktop_Qt_5_10_0_GCC_64bit-Debug"
 
 include(../emm/emmplugin.pri)
 
@@ -20,7 +20,9 @@ HEADERS += \
     layer.h \
     layertablemodel.h \
     slotwidget.h \
-    layerselectiontoolbar.h
+    layerselectiontoolbar.h \
+    slot.h \
+    slotconfigurationdialog.h
 
 SOURCES += \
     slotsplugin.cpp \
@@ -31,12 +33,15 @@ SOURCES += \
     layer.cpp \
     layertablemodel.cpp \
     slotwidget.cpp \
-    layerselectiontoolbar.cpp
+    layerselectiontoolbar.cpp \
+    slot.cpp \
+    slotconfigurationdialog.cpp
 
 FORMS += \
     slotcomponentwidget.ui \
     generalsettingswidget.ui \
-    slotwidget.ui
+    slotwidget.ui \
+    slotconfigurationdialog.ui
 
 DISTFILES += \
     slots.json

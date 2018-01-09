@@ -16,35 +16,47 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  **************************************************************************/
 
-#ifndef SLOTSPLUGIN_H
-#define SLOTSPLUGIN_H
+#ifndef SLOTCONFIGURATIONDIALOG_H
+#define SLOTCONFIGURATIONDIALOG_H
 
-#include <extensionsystem/iplugin.h>
+#include <QColor>
+#include <QDialog>
 
 namespace Slots {
 
 namespace Internal {
 
-class SlotComponentFactory;
+class Slot;
 
-class SlotsPlugin : public ExtensionSystem::IPlugin
+namespace Ui {
+class SlotConfigurationDialog;
+} // namespace Ui
+
+class SlotConfigurationDialog : public QDialog
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "de.eventmusicmachine.EmmPlugin" FILE "slots.json")
 
 public:
-    SlotsPlugin();
-    ~SlotsPlugin();
-
-    bool initialize(const QStringList &arguments, QString *errorMessage = 0);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
+    explicit SlotConfigurationDialog(Slot *slot, QWidget *parent = 0);
+    ~SlotConfigurationDialog();
 
 private:
-    SlotComponentFactory *m_factory;
+    void updateBackgroundLabelColor();
+    void updateFontLabelColor();
+
+    Ui::SlotConfigurationDialog *m_ui;
+    Slot *m_slot;
+    QColor m_backgroundColor;
+    QColor m_fontColor;
+
+private slots:
+    void save();
+    void selectFile();
+    void selectBackgroundColor();
+    void selectFontColor();
 };
 
 } // namespace Internal
 } // namespace Slots
 
-#endif // SLOTSPLUGIN_H
+#endif // SLOTCONFIGURATIONDIALOG_H

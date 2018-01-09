@@ -17,11 +17,13 @@
  **************************************************************************/
 
 #include <QSettings>
+#include <QUuid>
 #include <extensionsystem/pluginmanager.h>
 
 #include "slotcomponentwidget.h"
 #include "ui_slotcomponentwidget.h"
 #include "slotwidget.h"
+#include "slot.h"
 #include "layerselectiontoolbar.h"
 
 using namespace Slots::Internal;
@@ -40,12 +42,16 @@ SlotComponentWidget::SlotComponentWidget(QWidget *parent) :
     LayerSelectionToolbar *layerSelector = new LayerSelectionToolbar(this);
     m_ui->slotComponentLayout->insertWidget(0, layerSelector);
 
+    connect(layerSelector, &LayerSelectionToolbar::layerSelected, this, &SlotComponentWidget::updateLayer);
+
     updateWidgets();
+    layerSelector->map();
 }
 
 SlotComponentWidget::~SlotComponentWidget()
 {
     delete m_ui;
+    Slot::deleteSlots();
 }
 
 void SlotComponentWidget::updateWidgets()
@@ -80,8 +86,16 @@ void SlotComponentWidget::updateWidgets()
             QLayoutItem *item = m_ui->slotLayout->itemAtPosition(j, i);
             if (item == 0) {
                 SlotWidget *widget = new SlotWidget(j, i, this);
+                widget->updateSlot(m_selectedLayerId);
+                connect(this, &SlotComponentWidget::layerSelected, widget, &SlotWidget::updateSlot);
                 m_ui->slotLayout->addWidget(widget, j, i);
             }
         }
     }
+}
+
+void SlotComponentWidget::updateLayer(QString layerId)
+{
+    m_selectedLayerId = QUuid::fromString(layerId);
+    emit layerSelected(m_selectedLayerId);
 }

@@ -20,6 +20,7 @@
 #define SLOTCOMPONENTWIDGET_H
 
 #include <QWidget>
+#include <QUuid>
 
 namespace Slots {
 
@@ -41,8 +42,14 @@ public:
 
 private:
     void updateWidgets();
+    void updateLayer(QString layerId);
 
     Ui::SlotComponentWidget *m_ui;
+    QUuid m_selectedLayerId;
+
+signals:
+    void layerSelected(QUuid layerId);
+
 };
 
 } // namespace Internal

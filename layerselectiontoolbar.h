@@ -38,6 +38,8 @@ public:
     explicit LayerSelectionToolbar(QWidget *parent = nullptr);
     ~LayerSelectionToolbar();
 
+    void map();
+
 private:
     void updateLayers();
 
