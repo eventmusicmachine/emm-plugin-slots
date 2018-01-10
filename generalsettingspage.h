@@ -26,21 +26,41 @@ namespace Slots {
 
 namespace Internal {
 
-class GeneralSettingsWidget;
+class LayersTableModel;
+class Layer;
+
+namespace Ui {
+
+class GeneralSettingsPage;
+
+} //namespace Ui
 
 class GeneralSettingsPage : public Settings::ISettingsPage
 {
     Q_OBJECT
 public:
-    QString id() const;
-    QWidget *widget();
+    GeneralSettingsPage();
+    ~GeneralSettingsPage();
 
-    void load();
-    void apply();
+    QString id() const override;
+
+    void load() override;
+    void apply() override;
+
+private slots:
+    void layerCountChanged(int layers);
+    void rowCountChanged(int rows);
+    void columnCountChanged(int columns);
 
 private:
-    GeneralSettingsWidget *m_widget;
+    void updateLayers();
 
+    Ui::GeneralSettingsPage *m_ui;
+    QList<Layer*> m_layers;
+    LayersTableModel *m_layersModel;
+    int m_layerCount;
+    int m_rowCount;
+    int m_columnCount;
 };
 
 }

@@ -10,6 +10,14 @@
         {
             "Name": "Core",
             "Version": "3.0.0"
+        },
+        {
+            "Name": "Settings",
+            "Version": "3.0.0"
+        },
+        {
+            "Name": "Audio",
+            "Version": "3.0.0"
         }
     ]
 }

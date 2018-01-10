@@ -16,7 +16,6 @@ HEADERS += \
     slotcomponentwidget.h \
     generalsettingsfactory.h \
     generalsettingspage.h \
-    generalsettingswidget.h \
     layer.h \
     layertablemodel.h \
     slotwidget.h \
@@ -29,7 +28,6 @@ SOURCES += \
     slotcomponentfactory.cpp \
     slotcomponentwidget.cpp \
     generalsettingspage.cpp \
-    generalsettingswidget.cpp \
     layer.cpp \
     layertablemodel.cpp \
     slotwidget.cpp \
@@ -39,9 +37,9 @@ SOURCES += \
 
 FORMS += \
     slotcomponentwidget.ui \
-    generalsettingswidget.ui \
     slotwidget.ui \
-    slotconfigurationdialog.ui
+    slotconfigurationdialog.ui \
+    generalsettingspage.ui
 
 DISTFILES += \
     slots.json
