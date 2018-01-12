@@ -17,6 +17,8 @@
  **************************************************************************/
 
 #include <QSettings>
+#include <audio/devicemanager.h>
+#include <audio/ichannel.h>
 
 #include "slot.h"
 
@@ -33,6 +35,11 @@ Slot::Slot(QUuid slotId)
     load();
 }
 
+Slot::~Slot()
+{
+    delete m_output;
+}
+
 void Slot::load()
 {
     QSettings *s = settings();
@@ -41,6 +48,8 @@ void Slot::load()
     if (!m_exists) {
         return;
     }
+
+    // Read settings
 
     s->beginGroup(m_id.toString());
 
@@ -54,6 +63,8 @@ void Slot::load()
     m_fontSize = s->value("fontSize", 14).toInt();
 
     s->endGroup();
+
+    initializeOutput();
 }
 
 void Slot::save()
@@ -70,6 +81,50 @@ void Slot::save()
     s->setValue("fontColor", m_fontColor.name());
     s->setValue("fontSize", m_fontSize);
     s->endGroup();
+
+    initializeOutput();
+}
+
+void Slot::initializeOutput()
+{
+    if (m_output) {
+        delete m_output;
+    }
+
+    m_output = Audio::DeviceManager::instance()->createChannel(m_driver, m_device, m_channel);
+
+    if (!m_output) {
+        return;
+    }
+
+    m_output->load(m_fileName);
+}
+
+void Slot::play()
+{
+    if (!m_output) {
+        return;
+    }
+
+    m_output->play();
+}
+
+void Slot::stop()
+{
+    if (!m_output) {
+        return;
+    }
+
+    m_output->stop();
+}
+
+bool Slot::isPlaying()
+{
+    if (!m_output) {
+        return false;
+    }
+
+    return m_output->isPlaying();
 }
 
 QString Slot::title() const
@@ -125,6 +180,11 @@ void Slot::setChannel(int channel)
 bool Slot::exists() const
 {
     return m_exists;
+}
+
+Audio::IChannel *Slot::output() const
+{
+    return m_output;
 }
 
 QColor Slot::backgroundColor() const

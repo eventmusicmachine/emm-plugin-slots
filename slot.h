@@ -27,6 +27,10 @@ QT_BEGIN_NAMESPACE
 class QSettings;
 QT_END_NAMESPACE
 
+namespace Audio {
+class IChannel;
+} // namespace Audio
+
 namespace Slots {
 
 namespace Internal {
@@ -35,9 +39,13 @@ class Slot
 {
 public:
     Slot(QUuid id);
+    ~Slot();
 
     void load();
     void save();
+    void play();
+    void stop();
+    bool isPlaying();
 
     QString title() const;
     void setTitle(QString title);
@@ -57,11 +65,13 @@ public:
     void setFontColor(QColor color);
 
     bool exists() const;
+    Audio::IChannel *output() const;
 
     static Slot *create(QUuid layerId, int row, int column);
     static void deleteSlots();
 
 private:
+    void initializeOutput();
     static QSettings *settings();
 
     QUuid m_id;
@@ -75,6 +85,8 @@ private:
     QColor m_fontColor;
 
     bool m_exists;
+
+    Audio::IChannel *m_output = nullptr;
 
     static QMap<QUuid, Slot*> s_slots;
 };

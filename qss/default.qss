@@ -10,3 +10,23 @@ QWidget#Slots::Internal::SlotWidget {
 #titleLabel {
     text-align: center;
 }
+
+#slotNumberLabel {
+    border:2px solid #000000;
+    border-radius:5px;
+    font-size:11px;
+    font-weight:bold;
+    background-color:#ffffff;
+    padding: 2px;
+    margin: 2px;
+    min-width: 20px;
+}
+
+#timeLabel {
+    font-weight: bold;
+    margin: 2px;
+}
+
+#progressBar {
+    border: 0;
+}

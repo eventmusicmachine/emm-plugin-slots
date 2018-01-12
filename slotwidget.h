@@ -51,11 +51,16 @@ protected:
 
 private:
     void config();
+    void setTime(float time);
 
     Ui::SlotWidget *m_ui;
     Slot *m_slot;
     int m_row;
     int m_column;
+
+private slots:
+    void lengthUpdated(float length);
+    void positionChanged(float position, float length);
 };
 
 } // namespace Internal
