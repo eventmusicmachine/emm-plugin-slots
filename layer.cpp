@@ -64,27 +64,33 @@ bool Layer::visible() const
 void Layer::saveLayers(QList<Layer*> layers)
 {
     QFile settingsFile(settingsPath());
-    settingsFile.open(QIODevice::WriteOnly);
+    if (settingsFile.open(QIODevice::ReadWrite)) {
 
-    QXmlStreamWriter xmlWriter(&settingsFile);
-    xmlWriter.setAutoFormatting(true);
-    xmlWriter.writeStartDocument();
-    xmlWriter.writeStartElement("layers");
+        QXmlStreamWriter xmlWriter(&settingsFile);
+        xmlWriter.setAutoFormatting(true);
+        xmlWriter.writeStartDocument();
+        xmlWriter.writeStartElement("layers");
 
-    for (int i = 0; i < layers.count(); i++) {
-        Layer *layer = layers.at(i);
-        xmlWriter.writeStartElement("layer");
-        xmlWriter.writeAttribute("id", layer->id().toString());
-        xmlWriter.writeAttribute("position", QString::number(i));
-        xmlWriter.writeTextElement("name", layer->name());
-        xmlWriter.writeTextElement("visible", layer->visible() ? "true" : "false");
+        for (int i = 0; i < layers.count(); i++) {
+            Layer *layer = layers.at(i);
+            xmlWriter.writeStartElement("layer");
+            xmlWriter.writeAttribute("id", layer->id().toString());
+            xmlWriter.writeAttribute("position", QString::number(i));
+            xmlWriter.writeTextElement("name", layer->name());
+            xmlWriter.writeTextElement("visible", layer->visible() ? "true" : "false");
+            xmlWriter.writeEndElement();
+        }
+
         xmlWriter.writeEndElement();
+        xmlWriter.writeEndDocument();
+
+        settingsFile.close();
+    } else {
+        // TODO handle error
+        QString test1 = settingsFile.errorString();
+        QFileDevice::FileError error = settingsFile.error();
+        QString test2 = "lalala";
     }
-
-    xmlWriter.writeEndElement();
-    xmlWriter.writeEndDocument();
-
-    settingsFile.close();
 }
 
 QList<Layer*> Layer::readLayers()

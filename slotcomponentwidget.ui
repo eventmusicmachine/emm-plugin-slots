@@ -17,9 +17,6 @@
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="slotComponentLayout">
-   <property name="spacing">
-    <number>0</number>
-   </property>
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -33,11 +30,41 @@
     <number>0</number>
    </property>
    <item>
-    <layout class="QGridLayout" name="slotLayout">
-     <property name="spacing">
-      <number>1</number>
-     </property>
-    </layout>
+    <widget class="QStackedWidget" name="stackedWidget">
+     <widget class="QWidget" name="configurePage">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="noLayerLabel">
+         <property name="text">
+          <string>No layer configured. Please add a layer in the settings dialog.</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="slotPage">
+      <layout class="QGridLayout" name="slotLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>1</number>
+       </property>
+      </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>

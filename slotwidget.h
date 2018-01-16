@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include <QUuid>
+#include <memory>
 
 namespace Slots {
 
@@ -52,9 +53,10 @@ protected:
 private:
     void config();
     void setTime(float time);
+    void updateData();
 
     Ui::SlotWidget *m_ui;
-    Slot *m_slot;
+    std::unique_ptr<Slot> m_slot;
     int m_row;
     int m_column;
 

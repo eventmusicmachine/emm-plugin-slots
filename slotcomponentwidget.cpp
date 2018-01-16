@@ -97,5 +97,6 @@ void SlotComponentWidget::updateWidgets()
 void SlotComponentWidget::updateLayer(QString layerId)
 {
     m_selectedLayerId = QUuid::fromString(layerId);
+    m_ui->stackedWidget->setCurrentIndex(1);
     emit layerSelected(m_selectedLayerId);
 }

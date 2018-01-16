@@ -32,12 +32,13 @@ Slot::Slot(QUuid slotId)
     m_fontSize = 14;
     m_fontColor = "#cccccc";
     m_backgroundColor = "#000000";
+    m_title = "No Title";
     load();
 }
 
 Slot::~Slot()
 {
-    delete m_output;
+
 }
 
 void Slot::load()
@@ -81,17 +82,11 @@ void Slot::save()
     s->setValue("fontColor", m_fontColor.name());
     s->setValue("fontSize", m_fontSize);
     s->endGroup();
-
-    initializeOutput();
 }
 
 void Slot::initializeOutput()
 {
-    if (m_output) {
-        delete m_output;
-    }
-
-    m_output = Audio::DeviceManager::instance()->createChannel(m_driver, m_device, m_channel);
+    m_output.reset(Audio::DeviceManager::instance()->createChannel(m_driver, m_device, m_channel));
 
     if (!m_output) {
         return;
@@ -145,6 +140,9 @@ QString Slot::fileName() const
 void Slot::setFileName(QString fileName)
 {
     m_fileName = fileName;
+
+    // Load new file n output channel
+    initializeOutput();
 }
 
 QString Slot::driver() const
@@ -182,9 +180,9 @@ bool Slot::exists() const
     return m_exists;
 }
 
-Audio::IChannel *Slot::output() const
+Audio::IChannel& Slot::output() const
 {
-    return m_output;
+    return *m_output;
 }
 
 QColor Slot::backgroundColor() const

@@ -27,20 +27,20 @@
 
 using namespace Slots::Internal;
 
-SlotConfigurationDialog::SlotConfigurationDialog(Slot *slot, QWidget *parent) :
+SlotConfigurationDialog::SlotConfigurationDialog(Slot& slot, QWidget *parent) :
     QDialog(parent),
-    m_ui(new Ui::SlotConfigurationDialog)
+    m_ui(new Ui::SlotConfigurationDialog),
+    m_slot(slot)
 {
     m_ui->setupUi(this);
-    m_slot = slot;
 
     // Assign slot values to configuration fields
-    m_ui->textInputField->setText(m_slot->title());
-    m_ui->fileInputField->setText(m_slot->fileName());
-    m_ui->outputSelectionWidget->setSelection(m_slot->driver(), m_slot->device(), m_slot->channel());
-    m_backgroundColor = m_slot->backgroundColor();
-    m_fontColor = m_slot->fontColor();
-    m_ui->fontSizeSpinBox->setValue(m_slot->fontSize());
+    m_ui->textInputField->setText(m_slot.title());
+    m_ui->fileInputField->setText(m_slot.fileName());
+    m_ui->outputSelectionWidget->setSelection(m_slot.driver(), m_slot.device(), m_slot.channel());
+    m_backgroundColor = m_slot.backgroundColor();
+    m_fontColor = m_slot.fontColor();
+    m_ui->fontSizeSpinBox->setValue(m_slot.fontSize());
 
     updateBackgroundLabelColor();
     updateFontLabelColor();
@@ -58,14 +58,14 @@ SlotConfigurationDialog::~SlotConfigurationDialog()
 
 void SlotConfigurationDialog::save()
 {
-    m_slot->setTitle(m_ui->textInputField->text());
-    m_slot->setFileName(m_ui->fileInputField->text());
-    m_slot->setDriver(m_ui->outputSelectionWidget->driver());
-    m_slot->setDevice(m_ui->outputSelectionWidget->device());
-    m_slot->setChannel(m_ui->outputSelectionWidget->channel());
-    m_slot->setBackgroundColor(m_backgroundColor);
-    m_slot->setFontColor(m_fontColor);
-    m_slot->save();
+    m_slot.setTitle(m_ui->textInputField->text());
+    m_slot.setFileName(m_ui->fileInputField->text());
+    m_slot.setDriver(m_ui->outputSelectionWidget->driver());
+    m_slot.setDevice(m_ui->outputSelectionWidget->device());
+    m_slot.setChannel(m_ui->outputSelectionWidget->channel());
+    m_slot.setBackgroundColor(m_backgroundColor);
+    m_slot.setFontColor(m_fontColor);
+    m_slot.save();
     accept();
 }
 
@@ -82,7 +82,8 @@ void SlotConfigurationDialog::selectFile()
     dialog.setViewMode(QFileDialog::List);
     dialog.setMimeTypeFilters(mimeTypes);
     if (dialog.exec() && dialog.selectedFiles().length() > 0) {
-        m_ui->fileInputField->setText(dialog.selectedFiles().first());
+        QString file = dialog.selectedFiles().first();
+        m_ui->fileInputField->setText(file);
     }
 }
 

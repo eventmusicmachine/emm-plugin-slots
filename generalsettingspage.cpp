@@ -36,9 +36,10 @@ GeneralSettingsPage::GeneralSettingsPage() :
     m_ui->layersTableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
     m_ui->layersTableView->setColumnWidth(1, 55);
     m_ui->layersTableView->setAcceptDrops(true);
-    connect(m_ui->layersSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &GeneralSettingsPage::layerCountChanged);
     connect(m_ui->rowsSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &GeneralSettingsPage::rowCountChanged);
     connect(m_ui->columnsSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &GeneralSettingsPage::columnCountChanged);
+    connect(m_ui->addLayerButton, &QToolButton::clicked, this, &GeneralSettingsPage::addLayer);
+    connect(m_ui->removeLayerButton, &QToolButton::clicked, this, &GeneralSettingsPage::removeLayer);
 }
 
 GeneralSettingsPage::~GeneralSettingsPage()
@@ -56,31 +57,37 @@ QString GeneralSettingsPage::id() const
 void GeneralSettingsPage::load()
 {
     QSettings *settings = ExtensionSystem::PluginManager::instance()->settings();
-    m_layerCount = settings->value("slots/layers", 1).toInt();
     m_rowCount = settings->value("slots/rows", 10).toInt();
     m_columnCount = settings->value("slots/columns", 10).toInt();
-    updateLayers();
 
-    m_ui->layersSpinBox->setValue(m_layerCount);
     m_ui->rowsSpinBox->setValue(m_rowCount);
     m_ui->columnsSpinBox->setValue(m_columnCount);
+
+    m_layers = Layer::readLayers();
     m_layersModel->setLayers(m_layers);
 }
 
 void GeneralSettingsPage::apply()
 {
     QSettings *settings = ExtensionSystem::PluginManager::instance()->settings();
-    settings->setValue("slots/layers", m_layerCount);
     settings->setValue("slots/rows", m_rowCount);
     settings->setValue("slots/columns", m_columnCount);
 
     Layer::saveLayers(m_layers);
 }
 
-void GeneralSettingsPage::layerCountChanged(int layers)
+void GeneralSettingsPage::addLayer()
 {
-    m_layerCount = layers;
-    updateLayers();
+    Layer *layer = new Layer();
+    layer->setName(QString(tr("Layer %1")).arg(m_layers.length() + 1));
+    layer->setVisible(true);
+    m_layers.append(layer);
+    m_layersModel->setLayers(m_layers);
+}
+
+void GeneralSettingsPage::removeLayer()
+{
+
 }
 
 void GeneralSettingsPage::rowCountChanged(int rows)
@@ -91,24 +98,4 @@ void GeneralSettingsPage::rowCountChanged(int rows)
 void GeneralSettingsPage::columnCountChanged(int columns)
 {
     m_columnCount = columns;
-}
-
-void GeneralSettingsPage::updateLayers()
-{
-    QList<Layer*> layers = Layer::readLayers();
-
-    while (layers.length() > m_layerCount) {
-        layers.takeLast();
-    }
-
-    while (m_layerCount > layers.length()) {
-        Layer *layer = new Layer();
-        layer->setName(QString(tr("Layer %1")).arg(layers.length() + 1));
-        layer->setVisible(true);
-        layers.append(layer);
-    }
-
-    m_layersModel->setLayers(layers);
-    qDeleteAll(m_layers);
-    m_layers = layers;
 }

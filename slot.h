@@ -22,6 +22,7 @@
 #include <QColor>
 #include <QUuid>
 #include <QMap>
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 class QSettings;
@@ -65,13 +66,13 @@ public:
     void setFontColor(QColor color);
 
     bool exists() const;
-    Audio::IChannel *output() const;
+    void initializeOutput();
+    Audio::IChannel& output() const;
 
     static Slot *create(QUuid layerId, int row, int column);
     static void deleteSlots();
 
 private:
-    void initializeOutput();
     static QSettings *settings();
 
     QUuid m_id;
@@ -86,7 +87,7 @@ private:
 
     bool m_exists;
 
-    Audio::IChannel *m_output = nullptr;
+    std::unique_ptr<Audio::IChannel> m_output;
 
     static QMap<QUuid, Slot*> s_slots;
 };

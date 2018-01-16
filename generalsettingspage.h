@@ -48,17 +48,15 @@ public:
     void apply() override;
 
 private slots:
-    void layerCountChanged(int layers);
     void rowCountChanged(int rows);
     void columnCountChanged(int columns);
+    void addLayer();
+    void removeLayer();
 
 private:
-    void updateLayers();
-
     Ui::GeneralSettingsPage *m_ui;
     QList<Layer*> m_layers;
     LayersTableModel *m_layersModel;
-    int m_layerCount;
     int m_rowCount;
     int m_columnCount;
 };

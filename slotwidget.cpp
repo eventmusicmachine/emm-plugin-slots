@@ -40,6 +40,7 @@ SlotWidget::SlotWidget(int row, int column, QWidget *parent) :
 
 SlotWidget::~SlotWidget()
 {
+    m_slot.release();
     delete m_ui;
 }
 
@@ -49,31 +50,36 @@ void SlotWidget::updateSlot(QUuid layerId)
         return;
     }
 
-    m_slot = Slot::create(layerId, m_row, m_column);
+    m_slot.reset(Slot::create(layerId, m_row, m_column));
     if (m_slot) {
-        Audio::IChannel *output = m_slot->output();
+        /*Audio::IChannel output = m_slot->output();
         if (output) {
-            connect(m_slot->output(), &Audio::IChannel::lengthUpdated, this, &SlotWidget::lengthUpdated);
-            connect(m_slot->output(), &Audio::IChannel::positionChanged, this, &SlotWidget::positionChanged);
-        }
+            connect(&output, &Audio::IChannel::lengthUpdated, this, &SlotWidget::lengthUpdated);
+            connect(&output, &Audio::IChannel::positionChanged, this, &SlotWidget::positionChanged);
+        }*/
 
-        QFont font = m_ui->titleLabel->font();
-        font.setPointSize(m_slot->fontSize());
-
-        m_ui->stackedWidget->setCurrentIndex(m_slot->exists() ? 1 : 0);
-        m_ui->titleLabel->setText(m_slot->title());
-        m_ui->titleLabel->setFont(font);
-
-        m_ui->playerPage->setStyleSheet(" \
-            #playerPage, QProgressBar::chunk { background-color: " + m_slot->backgroundColor().name() + " } \
-            #titleLabel, #timeLabel { color: " + m_slot->fontColor().name() + " } \
-        ");
+        updateData();
 
         QMap<QString, Audio::IDriver*> drivers = Audio::DeviceManager::instance()->drivers();
         if (!drivers.contains(m_slot->driver())) {
             return;
         }
     }
+}
+
+void SlotWidget::updateData()
+{
+    QFont font = m_ui->titleLabel->font();
+    font.setPointSize(m_slot->fontSize());
+
+    m_ui->stackedWidget->setCurrentIndex(m_slot->exists() ? 1 : 0);
+    m_ui->titleLabel->setText(m_slot->title());
+    m_ui->titleLabel->setFont(font);
+
+    m_ui->playerPage->setStyleSheet(" \
+        #playerPage, QProgressBar::chunk { background-color: " + m_slot->backgroundColor().name() + " } \
+        #titleLabel, #timeLabel { color: " + m_slot->fontColor().name() + " } \
+    ");
 }
 
 void SlotWidget::lengthUpdated(float length)
@@ -86,6 +92,7 @@ void SlotWidget::lengthUpdated(float length)
 void SlotWidget::positionChanged(float position, float length)
 {
     m_ui->progressBar->setValue(length - position);
+    m_ui->progressBar->repaint();
     setTime(length - position);
 }
 
@@ -101,8 +108,10 @@ void SlotWidget::setTime(float time)
 
 void SlotWidget::config()
 {
-    SlotConfigurationDialog dialog(m_slot, this);
-    dialog.exec();
+    SlotConfigurationDialog dialog(*m_slot, this);
+    if(dialog.exec()) {
+        updateData();
+    }
 }
 
 void SlotWidget::mousePressEvent(QMouseEvent *e)

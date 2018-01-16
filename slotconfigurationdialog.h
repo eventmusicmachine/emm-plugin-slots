@@ -37,7 +37,7 @@ class SlotConfigurationDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SlotConfigurationDialog(Slot *slot, QWidget *parent = 0);
+    explicit SlotConfigurationDialog(Slot& slot, QWidget *parent = 0);
     ~SlotConfigurationDialog();
 
 private:
@@ -45,7 +45,7 @@ private:
     void updateFontLabelColor();
 
     Ui::SlotConfigurationDialog *m_ui;
-    Slot *m_slot;
+    Slot& m_slot;
     QColor m_backgroundColor;
     QColor m_fontColor;
 
