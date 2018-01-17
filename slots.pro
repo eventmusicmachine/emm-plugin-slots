@@ -20,7 +20,8 @@ HEADERS += \
     slotwidget.h \
     layerselectiontoolbar.h \
     slot.h \
-    slotconfigurationdialog.h
+    slotconfigurationdialog.h \
+    slotmanager.h
 
 SOURCES += \
     slotsplugin.cpp \
@@ -32,7 +33,8 @@ SOURCES += \
     slotwidget.cpp \
     layerselectiontoolbar.cpp \
     slot.cpp \
-    slotconfigurationdialog.cpp
+    slotconfigurationdialog.cpp \
+    slotmanager.cpp
 
 FORMS += \
     slotcomponentwidget.ui \

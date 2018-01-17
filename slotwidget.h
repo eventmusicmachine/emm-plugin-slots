@@ -56,7 +56,7 @@ private:
     void updateData();
 
     Ui::SlotWidget *m_ui;
-    std::unique_ptr<Slot> m_slot;
+    std::shared_ptr<Slot> m_slot;
     int m_row;
     int m_column;
 

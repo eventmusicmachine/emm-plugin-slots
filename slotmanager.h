@@ -16,37 +16,38 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  **************************************************************************/
 
-#ifndef SLOTSPLUGIN_H
-#define SLOTSPLUGIN_H
+#ifndef SLOTMANAGER_H
+#define SLOTMANAGER_H
 
-#include <extensionsystem/iplugin.h>
+#include <QObject>
+#include <QHash>
+#include <QUuid>
+#include <memory>
+
+#include <slot.h>
 
 namespace Slots {
-
 namespace Internal {
 
-class SlotComponentFactory;
-class SlotManager;
+class SlotsPlugin;
 
-class SlotsPlugin : public ExtensionSystem::IPlugin
+class SlotManager : public QObject
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "de.eventmusicmachine.EmmPlugin" FILE "slots.json")
-
 public:
-    SlotsPlugin();
-    ~SlotsPlugin();
+    std::shared_ptr<Slot> createSlot(QUuid layerId, int row, int column);
 
-    bool initialize(const QStringList &arguments, QString *errorMessage = 0);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
+    static SlotManager *instance();
 
 private:
-    SlotComponentFactory *m_factory;
-    SlotManager *m_manager;
+    SlotManager();
+
+    QHash<QUuid, std::shared_ptr<Slot>> m_slots;
+
+    friend class Slots::Internal::SlotsPlugin;
 };
 
 } // namespace Internal
-} // namespace Slots
+} // namespace
 
-#endif // SLOTSPLUGIN_H
+#endif // SLOTMANAGER_H

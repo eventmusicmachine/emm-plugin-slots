@@ -21,7 +21,6 @@
 
 #include <QColor>
 #include <QUuid>
-#include <QMap>
 #include <memory>
 
 QT_BEGIN_NAMESPACE
@@ -36,10 +35,11 @@ namespace Slots {
 
 namespace Internal {
 
+class SlotManager;
+
 class Slot
 {
 public:
-    Slot(QUuid id);
     ~Slot();
 
     void load();
@@ -69,10 +69,9 @@ public:
     void initializeOutput();
     Audio::IChannel& output() const;
 
-    static Slot *create(QUuid layerId, int row, int column);
-    static void deleteSlots();
-
 private:
+    Slot(QUuid id);
+
     static QSettings *settings();
 
     QUuid m_id;
@@ -89,7 +88,7 @@ private:
 
     std::unique_ptr<Audio::IChannel> m_output;
 
-    static QMap<QUuid, Slot*> s_slots;
+    friend class Slots::Internal::SlotManager;
 };
 
 } // namespace Internal

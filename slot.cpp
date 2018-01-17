@@ -24,8 +24,6 @@
 
 using namespace Slots::Internal;
 
-QMap<QUuid, Slot*> Slot::s_slots = QMap<QUuid, Slot*>();
-
 Slot::Slot(QUuid slotId)
 {
     m_id = slotId;
@@ -213,24 +211,6 @@ int Slot::fontSize() const
 void Slot::setFontSize(int size)
 {
     m_fontSize = size;
-}
-
-Slot *Slot::create(QUuid layerId, int row, int column)
-{
-    QUuid slotId = QUuid::createUuidV3(layerId, QString::number(row) + "-" + QString::number(column));
-
-    if (s_slots.contains(slotId)) {
-        return s_slots.value(slotId);
-    }
-
-    Slot *slot = new Slot(slotId);
-    s_slots.insert(slotId, slot);
-    return slot;
-}
-
-void Slot::deleteSlots()
-{
-    qDeleteAll(s_slots);
 }
 
 QSettings *Slot::settings()

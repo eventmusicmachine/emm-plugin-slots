@@ -23,11 +23,14 @@
 #include "slotsplugin.h"
 #include "slotcomponentfactory.h"
 #include "generalsettingsfactory.h"
+#include "slotmanager.h"
 
 using namespace Slots;
 using namespace Slots::Internal;
 
-SlotsPlugin::SlotsPlugin()
+SlotsPlugin::SlotsPlugin():
+    m_factory(new SlotComponentFactory),
+    m_manager(new SlotManager)
 {
 
 }
@@ -36,6 +39,7 @@ SlotsPlugin::~SlotsPlugin()
 {
     ExtensionSystem::PluginManager::removeObject(m_factory);
     delete m_factory;
+    delete m_manager;
 }
 
 bool SlotsPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -43,11 +47,11 @@ bool SlotsPlugin::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
 
-    m_factory = new SlotComponentFactory;
     ExtensionSystem::PluginManager::addObject(m_factory);
     Settings::NavigationTreeItem *settingsItem = Settings::SettingsManager::createNavigationNode("SLOTS", tr("Cart Slots"));
     settingsItem->setFactory(new GeneralSettingsFactory());
     Settings::SettingsManager::navigationNode("ROOT")->addChild(settingsItem);
+
 
     return true;
 }

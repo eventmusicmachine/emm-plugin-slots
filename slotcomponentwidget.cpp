@@ -51,7 +51,6 @@ SlotComponentWidget::SlotComponentWidget(QWidget *parent) :
 SlotComponentWidget::~SlotComponentWidget()
 {
     delete m_ui;
-    Slot::deleteSlots();
 }
 
 void SlotComponentWidget::updateWidgets()

@@ -16,37 +16,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  **************************************************************************/
 
-#ifndef SLOTSPLUGIN_H
-#define SLOTSPLUGIN_H
+#include "slotmanager.h"
 
-#include <extensionsystem/iplugin.h>
+using namespace Slots::Internal;
 
-namespace Slots {
+static SlotManager *m_instance;
 
-namespace Internal {
-
-class SlotComponentFactory;
-class SlotManager;
-
-class SlotsPlugin : public ExtensionSystem::IPlugin
+SlotManager::SlotManager() : QObject()
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "de.eventmusicmachine.EmmPlugin" FILE "slots.json")
+    m_instance = this;
+}
 
-public:
-    SlotsPlugin();
-    ~SlotsPlugin();
+SlotManager *SlotManager::instance()
+{
+    return m_instance;
+}
 
-    bool initialize(const QStringList &arguments, QString *errorMessage = 0);
-    void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
+std::shared_ptr<Slot> SlotManager::createSlot(QUuid layerId, int row, int column)
+{
+    QUuid slotId = QUuid::createUuidV3(layerId, QString::number(row) + "-" + QString::number(column));
 
-private:
-    SlotComponentFactory *m_factory;
-    SlotManager *m_manager;
-};
+    if (m_slots.contains(slotId)) {
+        return m_slots.value(slotId);
+    }
 
-} // namespace Internal
-} // namespace Slots
-
-#endif // SLOTSPLUGIN_H
+    std::shared_ptr<Slot> slot = std::shared_ptr<Slot>(new Slot(slotId));
+    m_slots.insert(slotId, slot);
+    return slot;
+}

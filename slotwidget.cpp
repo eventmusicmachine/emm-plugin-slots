@@ -25,6 +25,7 @@
 #include "slotwidget.h"
 #include "ui_slotwidget.h"
 #include "slot.h"
+#include "slotmanager.h"
 #include "slotconfigurationdialog.h"
 
 using namespace Slots::Internal;
@@ -40,7 +41,6 @@ SlotWidget::SlotWidget(int row, int column, QWidget *parent) :
 
 SlotWidget::~SlotWidget()
 {
-    m_slot.release();
     delete m_ui;
 }
 
@@ -50,7 +50,7 @@ void SlotWidget::updateSlot(QUuid layerId)
         return;
     }
 
-    m_slot.reset(Slot::create(layerId, m_row, m_column));
+    m_slot = SlotManager::instance()->createSlot(layerId, m_row, m_column);
     if (m_slot) {
         /*Audio::IChannel output = m_slot->output();
         if (output) {
